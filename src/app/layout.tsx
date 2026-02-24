@@ -35,7 +35,6 @@ export default function RootLayout({
         <AuthProvider>
           <BookmarkDataProvider>
             <BookmarkUIProvider>
-              <Header />
               {children}
             </BookmarkUIProvider>
           </BookmarkDataProvider>
