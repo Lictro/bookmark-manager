@@ -26,6 +26,7 @@ import {
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuth } from "@/context/AuthContext";
+import { BookmarkDialog } from "./BookmarkDialog";
 
 export const Header: React.FC = () => {
   const {
@@ -155,6 +156,8 @@ export const Header: React.FC = () => {
           </div>
         </div>
       </header>
+
+      <BookmarkDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
     </>
   );
 };

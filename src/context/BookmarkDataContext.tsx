@@ -18,6 +18,7 @@ interface BookmarkDataContextType {
     title: string;
     description?: string;
     url: string;
+    tags: string[];
   }) => Promise<void>;
   updateBookmark: (
     id: string,
@@ -86,10 +87,12 @@ export const BookmarkDataProvider = ({
     title,
     description,
     url,
+    tags: newTags = [],
   }: {
     title: string;
     description?: string;
     url: string;
+    tags?: string[];
   }) => {
     const {
       data: { user },
@@ -97,42 +100,102 @@ export const BookmarkDataProvider = ({
 
     if (!user) return;
 
-    const { data, error } = await supabase
-      .from("bookmarks")
-      .insert({
-        title,
-        description,
-        url,
-        user_id: user.id,
-      })
-      .select()
-      .single();
+    try {
+      const { data: bookmarkData, error: bookmarkError } = await supabase
+        .from("bookmarks")
+        .insert({
+          title,
+          description,
+          url,
+          user_id: user.id,
+        })
+        .select()
+        .single(); 
 
-    if (error) {
-      console.error(error);
-      return;
+      if (bookmarkError || !bookmarkData) throw bookmarkError;
+
+      for (const tagName of newTags) {
+        const { data: existingTag } = await supabase
+          .from("tags")
+          .select("*")
+          .eq("name", tagName)
+          .maybeSingle();
+
+        let tagId: string;
+
+        if (existingTag) {
+          tagId = existingTag.id;
+        } else {
+          const { data: newTag } = await supabase
+            .from("tags")
+            .insert({ name: tagName })
+            .select()
+            .single();
+          tagId = newTag.id;
+        }
+        await supabase.from("bookmark_tags").insert({
+          bookmark_id: bookmarkData.id,
+          tag_id: tagId,
+        });
+      }
+
+      setBookmarks((prev) => [bookmarkData, ...prev]);
+    } catch (error) {
+      console.error("Error adding bookmark:", error);
     }
-
-    setBookmarks((prev) => [data, ...prev]);
   };
 
   const updateBookmark = async (
     id: string,
-    updates: Partial<Bookmark>
+    updates: Partial<Bookmark> & { tags?: string[] }
   ) => {
-    const { error } = await supabase
-      .from("bookmarks")
-      .update(updates)
-      .eq("id", id);
+    const { tags: newTags, ...bookmarkFields } = updates;
 
-    if (error) {
-      console.error(error);
-      return;
+    try {
+      const { error: bookmarkError } = await supabase
+        .from("bookmarks")
+        .update(bookmarkFields)
+        .eq("id", id);
+
+      if (bookmarkError) throw bookmarkError;
+
+      if (newTags) {
+        for (const tagName of newTags) {
+          const { data: existingTag } = await supabase
+            .from("tags")
+            .select("*")
+            .eq("name", tagName)
+            .single();
+
+          if (!existingTag) {
+            await supabase.from("tags").insert({ name: tagName });
+          }
+        }
+
+        await supabase.from("bookmark_tags").delete().eq("bookmark_id", id);
+
+        for (const tagName of newTags) {
+          const { data: tag } = await supabase
+            .from("tags")
+            .select("*")
+            .eq("name", tagName)
+            .single();
+
+          if (tag) {
+            await supabase.from("bookmark_tags").insert({
+              bookmark_id: id,
+              tag_id: tag.id,
+            });
+          }
+        }
+      }
+
+      setBookmarks((prev) =>
+        prev.map((b) => (b.id === id ? { ...b, ...bookmarkFields, tags: newTags } : b))
+      );
+    } catch (error) {
+      console.error("Error updating bookmark:", error);
     }
-
-    setBookmarks((prev) =>
-      prev.map((b) => (b.id === id ? { ...b, ...updates } : b))
-    );
   };
 
   const deleteBookmark = async (id: string) => {
