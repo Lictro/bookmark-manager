@@ -15,7 +15,7 @@ import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import { Badge } from './ui/badge';
 import { useBookmarkData } from '@/context/BookmarkDataContext';
-// import { toast } from 'sonner';
+import { toast } from 'sonner';
 
 interface BookmarkDialogProps {
   open: boolean;
@@ -76,7 +76,7 @@ export const BookmarkDialog: React.FC<BookmarkDialogProps> = ({
     e.preventDefault();
 
     if (!title.trim() || !url.trim()) {
-    //   toast.error('Title and URL are required');
+      toast.error('Title and URL are required');
       return;
     }
 
@@ -84,7 +84,7 @@ export const BookmarkDialog: React.FC<BookmarkDialogProps> = ({
     try {
       new URL(url);
     } catch {
-    //   toast.error('Please enter a valid URL');
+      toast.error('Please enter a valid URL');
       return;
     }
 
@@ -95,7 +95,7 @@ export const BookmarkDialog: React.FC<BookmarkDialogProps> = ({
         description,
         tags,
       });
-    //   toast.success('Bookmark updated successfully');
+      toast.success('Bookmark updated successfully');
     } else {
       addBookmark({
         title,
@@ -103,7 +103,7 @@ export const BookmarkDialog: React.FC<BookmarkDialogProps> = ({
         description,
         tags,
       });
-    //   toast.success('Bookmark added successfully');
+      toast.success('Bookmark added successfully');
     }
 
     onOpenChange(false);

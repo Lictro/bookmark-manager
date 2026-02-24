@@ -68,13 +68,29 @@ export const BookmarkDataProvider = ({
 
       const { data, error } = await supabase
         .from("bookmarks")
-        .select("*")
+        .select(`
+          *,
+          bookmark_tags (
+            tags (
+              id,
+              name
+            )
+          )
+        `)
         .eq("user_id", user.id)
         .order("created_at", { ascending: false });
 
       if (error) throw error;
 
-      setBookmarks(data || []);
+      const formatted = (data || []).map((bookmark: any) => ({
+        ...bookmark,
+        tags:
+          bookmark.bookmark_tags?.map(
+            (bt: any) => bt.tags?.name
+          ) || [],
+      }));
+
+      setBookmarks(formatted);
     } catch (error) {
       console.error("Error loading bookmarks:", error);
       setBookmarks([]);
@@ -191,7 +207,7 @@ export const BookmarkDataProvider = ({
       }
 
       setBookmarks((prev) =>
-        prev.map((b) => (b.id === id ? { ...b, ...bookmarkFields, tags: newTags } : b))
+        prev.map((b) => (b.id === id ? { ...b, ...bookmarkFields, tags: newTags || [] } : b))
       );
     } catch (error) {
       console.error("Error updating bookmark:", error);

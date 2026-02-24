@@ -11,5 +11,5 @@ export interface Bookmark {
   view_count: number;
   last_visited: string | null;
   created_at: string;
-  tags?: string[];
+  tags: string[];
 }
