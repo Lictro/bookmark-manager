@@ -4,7 +4,6 @@ import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { BookmarkDataProvider } from "@/context/BookmarkDataContext";
 import { BookmarkUIProvider } from "@/context/BookmarkUIContext";
-import { Header } from "@/components/Header";
 import { Toaster } from "@/components/ui/toaster";
 
 const geistSans = Geist({
@@ -38,7 +37,7 @@ export default function RootLayout({
               {children}
             </BookmarkUIProvider>
           </BookmarkDataProvider>
-           <Toaster />
+          <Toaster />
         </AuthProvider>
       </body>
     </html>

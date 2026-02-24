@@ -24,6 +24,7 @@ import { toast } from 'sonner';
 import { BookmarkDialog } from './BookmarkDialog';
 import { useBookmarkData } from '@/context/BookmarkDataContext';
 import { formatDate, getFaviconUrl } from '@/utils/bookmarksUtils';
+import { BookmarkDetailDialog } from './BookmarkDetailDialog';
 
 interface BookmarkCardProps {
   bookmark: Bookmark;
@@ -74,7 +75,7 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({ bookmark }) => {
     e.stopPropagation();
     setIsEditDialogOpen(true);
   };
-
+  // TODO: FIX CARD UI STYLES
   return (
     <>
       <div
@@ -201,6 +202,12 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({ bookmark }) => {
       <BookmarkDialog
         open={isEditDialogOpen}
         onOpenChange={setIsEditDialogOpen}
+        bookmark={bookmark}
+      />
+
+      <BookmarkDetailDialog
+        open={isDetailDialogOpen}
+        onOpenChange={setIsDetailDialogOpen}
         bookmark={bookmark}
       />
     </>
