@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Bookmark } from "lucide-react";
+import { toast } from "sonner";
 
 export default function LoginPage() {
   const supabase = createClient();
@@ -12,28 +13,61 @@ export default function LoginPage() {
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   const isLogin = mode === "login";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setErrorMsg(null);
 
-    const { error } = isLogin
-      ? await supabase.auth.signInWithPassword({ email, password })
-      : await supabase.auth.signUp({ email, password });
+    try {
+      if (!isLogin) {
+        if (password !== confirmPassword) {
+          toast.error("Passwords do not match");
+          setLoading(false);
+          return;
+        }
 
-    if (error) {
-      setErrorMsg(error.message);
-      setLoading(false);
-      return;
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo: `${window.location.origin}`,
+          },
+        });
+
+        if (error) {
+          toast.error(error.message);
+          setLoading(false);
+          return;
+        }
+
+        toast.success("Check your email to confirm your account");
+        setLoading(false);
+        return;
+      }
+
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        toast.error(error.message);
+        setLoading(false);
+        return;
+      }
+
+      toast.success("Welcome back");
+      router.push("/");
+      router.refresh();
+    } catch (err) {
+      toast.error("Something went wrong");
     }
 
-    router.push("/");
-    router.refresh();
+    setLoading(false);
   };
 
   return (
@@ -44,9 +78,11 @@ export default function LoginPage() {
             <Bookmark className="size-6 text-white" />
           </div>
         </div>
-        <h1 className="text-2xl font-semibold text-center mb-2">
+
+        <h1 className="text-2xl font-semibold text-center mb-2 text-black">
           Bookmark Manager
         </h1>
+
         <p className="text-sm text-gray-500 text-center mb-6">
           {isLogin
             ? "Sign in to your account"
@@ -55,6 +91,7 @@ export default function LoginPage() {
 
         <div className="flex bg-gray-100 rounded-full p-1 mb-6">
           <button
+            type="button"
             onClick={() => setMode("login")}
             className={`flex-1 py-2 text-sm rounded-full transition ${
               isLogin
@@ -65,6 +102,7 @@ export default function LoginPage() {
             Login
           </button>
           <button
+            type="button"
             onClick={() => setMode("signup")}
             className={`flex-1 py-2 text-sm rounded-full transition ${
               !isLogin
@@ -77,11 +115,10 @@ export default function LoginPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-
           <input
             type="email"
             placeholder="Email"
-            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black"
+            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black text-black placeholder-gray-800"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -90,14 +127,21 @@ export default function LoginPage() {
           <input
             type="password"
             placeholder="Password"
-            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black"
+            className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black text-black placeholder-gray-800"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
 
-          {errorMsg && (
-            <p className="text-red-500 text-sm">{errorMsg}</p>
+          {!isLogin && (
+            <input
+              type="password"
+              placeholder="Confirm Password"
+              className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black text-black placeholder-gray-800"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
           )}
 
           <button

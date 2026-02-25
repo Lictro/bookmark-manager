@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Search,
   Plus,
@@ -30,6 +31,7 @@ import { BookmarkDialog } from "./BookmarkDialog";
 import { MobileSidebar } from "./MobileSidebar";
 
 export const Header: React.FC = () => {
+  const router = useRouter();
   const {
     searchQuery,
     setSearchQuery,
@@ -56,6 +58,7 @@ export const Header: React.FC = () => {
 
   const handleSignOut = async () => {
     await signOut();
+    router.push("/login");
   };
 
   const getUserInitials = () => {

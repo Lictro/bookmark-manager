@@ -42,7 +42,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signUp = async (email: string, password: string, name?: string) => {
-    // Signup directamente con Supabase, sin fetch extra
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -51,7 +50,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       },
     });
     if (error) throw error;
-    // Nota: data.user será null hasta que confirme email si la confirmación está activada
     setUser(data.user ?? null);
   };
 
