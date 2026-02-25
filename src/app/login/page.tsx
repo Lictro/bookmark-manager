@@ -11,8 +11,8 @@ export default function LoginPage() {
   const router = useRouter();
 
   const [mode, setMode] = useState<"login" | "signup">("login");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("fake_user@fakeemail.com");
+  const [password, setPassword] = useState("Test1234!");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -60,7 +60,7 @@ export default function LoginPage() {
         return;
       }
 
-      toast.success("Welcome back");
+      toast.success("Welcome!!");
       router.push("/");
       router.refresh();
     } catch (err) {
