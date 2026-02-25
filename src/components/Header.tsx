@@ -27,6 +27,7 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuth } from "@/context/AuthContext";
 import { BookmarkDialog } from "./BookmarkDialog";
+import { MobileSidebar } from "./MobileSidebar";
 
 export const Header: React.FC = () => {
   const {
@@ -77,8 +78,8 @@ export const Header: React.FC = () => {
   return (
     <>
       <header className="border-b bg-background">
-        <div className="flex items-center justify-between px-6 py-4">
-
+        <div className="flex items-center justify-between px-6 py-4">   
+          <MobileSidebar />
           <div className="flex items-center gap-4">
             <div className="flex-1 max-w-lg relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />

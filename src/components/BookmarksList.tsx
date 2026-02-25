@@ -6,6 +6,7 @@ import { BookmarkCard } from './BookmarkCard'
 import { filterBookmarks, sortBookmarks } from '@/utils/bookmarksUtils'
 import { Header } from './Header'
 import { EmptyState } from './EmptyState'
+import { Sidebar } from './Sidebar'
 
 export default function BookmarksList() {
   const { bookmarks, loading } = useBookmarkData()
@@ -26,6 +27,9 @@ export default function BookmarksList() {
       
       {/* Content Area */}
       <div className="flex-1 flex overflow-hidden">
+        <div className="hidden md:block">
+          <Sidebar />
+        </div>
         <main className="flex-1 overflow-y-auto">
           <div className="max-w-7xl mx-auto p-6">
             {/* Title & Description */}

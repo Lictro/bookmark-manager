@@ -81,3 +81,11 @@ export function sortBookmarks(
 
   return [...pinned, ...unpinned];
 }
+
+export const getUniqueTags = (bookmarks: Bookmark[]): string[] => {
+  const tagSet = new Set<string>();
+  bookmarks.forEach(bookmark => {
+    bookmark.tags.forEach(tag => tagSet.add(tag));
+  });
+  return Array.from(tagSet).sort();
+};
