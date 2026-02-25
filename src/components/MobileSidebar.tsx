@@ -8,7 +8,7 @@ export const MobileSidebar: React.FC = () => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline" size="icon" className="md:hidden">
+        <Button variant="outline" size="icon" className="md:hidden mr-1">
           <Menu className="size-4" />
         </Button>
       </SheetTrigger>

@@ -60,7 +60,6 @@ export const BookmarkDetailDialog: React.FC<BookmarkDetailDialogProps> = ({
     toast.success(bookmark.is_archived ? 'Restored bookmark' : 'Archived bookmark');
     onOpenChange(false);
   };
-  //TODO: FIX VIEW, LAST VISITED, DATE ADDED STYLES
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px]">
@@ -154,7 +153,7 @@ export const BookmarkDetailDialog: React.FC<BookmarkDetailDialogProps> = ({
                 <Clock className="size-4" />
                 <span className="text-xs">Last Visited</span>
               </div>
-              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+              <p className="text-lg font-medium text-gray-900 dark:text-gray-100">
                 {bookmark.last_visited ? formatDate(bookmark.last_visited) : "Never"}
               </p>
             </div>
@@ -163,7 +162,7 @@ export const BookmarkDetailDialog: React.FC<BookmarkDetailDialogProps> = ({
                 <Calendar className="size-4" />
                 <span className="text-xs">Date Added</span>
               </div>
-              <p className="text-sm font-medium text-gray-900 dark:text-gray-100">
+              <p className="text-lg font-medium text-gray-900 dark:text-gray-100">
                 {formatDate(bookmark.created_at)}
               </p>
             </div>

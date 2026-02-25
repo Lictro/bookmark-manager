@@ -75,7 +75,6 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({ bookmark }) => {
     e.stopPropagation();
     setIsEditDialogOpen(true);
   };
-  // TODO: FIX CARD UI STYLES
   return (
     <>
       <div
@@ -154,7 +153,8 @@ export const BookmarkCard: React.FC<BookmarkCardProps> = ({ bookmark }) => {
               </DropdownMenu>
             </div>
 
-            <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-3">
+            <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-3"
+  style={{ minHeight: "2.5rem" }}>
               {bookmark.description}
             </p>
 
