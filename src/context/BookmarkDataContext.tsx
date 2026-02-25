@@ -154,8 +154,11 @@ export const BookmarkDataProvider = ({
           tag_id: tagId,
         });
       }
-
-      setBookmarks((prev) => [bookmarkData, ...prev]);
+      const bookmarkWithTags = {
+        ...bookmarkData,
+        tags: newTags,
+      };
+      setBookmarks((prev) => [bookmarkWithTags, ...prev]);
     } catch (error) {
       console.error("Error adding bookmark:", error);
     }

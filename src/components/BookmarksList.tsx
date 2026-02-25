@@ -7,6 +7,7 @@ import { filterBookmarks, sortBookmarks } from '@/utils/bookmarksUtils'
 import { Header } from './Header'
 import { EmptyState } from './EmptyState'
 import { Sidebar } from './Sidebar'
+import { Badge } from './ui/badge'
 
 export default function BookmarksList() {
   const { bookmarks, loading } = useBookmarkData()
@@ -40,8 +41,15 @@ export default function BookmarksList() {
               <p className="text-sm text-gray-600 dark:text-gray-400">
                 {sortedBookmarks.length} {sortedBookmarks.length === 1 ? 'bookmark' : 'bookmarks'}
                 {searchQuery && ` matching "${searchQuery}"`}
-                {selectedTags.length > 0 && ` with tags: ${selectedTags.join(', ')}`}
+                {selectedTags.length > 0 && ` with tags:`}
               </p>
+              <div className="flex flex-wrap gap-2 mt-1">
+                 {selectedTags.map(tag => (
+                   <Badge key={tag} variant="secondary">
+                     {tag}
+                   </Badge>
+                 ))}
+               </div>
             </div>
 
             {/* Bookmarks Grid or Empty State */}
