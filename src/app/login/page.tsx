@@ -11,8 +11,10 @@ export default function LoginPage() {
   const router = useRouter();
 
   const [mode, setMode] = useState<"login" | "signup">("login");
-  const [email, setEmail] = useState("fake_user@fakeemail.com");
-  const [password, setPassword] = useState("Test1234!");
+  const DEFAULT_EMAIL = process.env.NEXT_PUBLIC_DEMO_EMAIL || "";
+  const DEFAULT_PASSWORD = process.env.NEXT_PUBLIC_DEMO_PASSWORD || "";
+  const [email, setEmail] = useState(DEFAULT_EMAIL);
+  const [password, setPassword] = useState(DEFAULT_PASSWORD);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
 
