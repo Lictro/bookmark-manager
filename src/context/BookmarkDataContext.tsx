@@ -10,6 +10,7 @@ import {
 
 import { createClient } from "@/lib/supabase/client";
 import { Bookmark } from "../types/bookmark";
+import { useAuth } from "./AuthContext";
 
 interface BookmarkDataContextType {
   bookmarks: Bookmark[];
@@ -48,19 +49,18 @@ export const BookmarkDataProvider = ({
   children: ReactNode;
 }) => {
   const supabase = createClient();
+  const { user, loading: authLoading } = useAuth();
   const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (authLoading) return; // Wait for auth to load
     loadBookmarks();
-  }, []);
+  }, [authLoading, user]);
 
   const loadBookmarks = async () => {
+    setLoading(true); // Start loading
     try {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
       if (!user) {
         setBookmarks([]);
         return;

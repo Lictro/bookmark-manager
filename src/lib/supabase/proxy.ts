@@ -36,15 +36,28 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getClaims()
 
   const user = data?.claims
+  console.log('[proxy] path=', request.nextUrl.pathname, 'userExists=', !!user)
 
+  // If there's no authenticated user, redirect to /login (unless already on login/auth)
   if (
     !user &&
     !request.nextUrl.pathname.startsWith('/login') &&
     !request.nextUrl.pathname.startsWith('/auth')
   ) {
-    // no user, potentially respond by redirecting the user to the login page
     const url = request.nextUrl.clone()
     url.pathname = '/login'
+    console.log('[proxy] redirecting to /login')
+    return NextResponse.redirect(url)
+  }
+
+  // If there *is* an authenticated user and they're trying to visit /login, send them home
+  if (
+    user &&
+    request.nextUrl.pathname.startsWith('/login')
+  ) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/'
+    console.log('[proxy] authenticated user requesting /login — redirecting to /')
     return NextResponse.redirect(url)
   }
 

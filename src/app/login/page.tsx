@@ -10,7 +10,6 @@ import { useAuth } from '@/context/AuthContext';
 export default function LoginPage() {
   const supabase = createClient();
   const router = useRouter();
-
   const { user, loading: authLoading } = useAuth();
 
   const [mode, setMode] = useState<"login" | "signup">("login");
@@ -23,11 +22,14 @@ export default function LoginPage() {
 
   const isLogin = mode === "login";
 
+  // Redirect to / if already authenticated
   useEffect(() => {
     if (!authLoading && user) {
-      router.replace('/');
+      router.replace('/')
     }
-  }, [authLoading, user, router]);
+  }, [authLoading, user, router])
+
+  if (user) return null
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -80,8 +82,6 @@ export default function LoginPage() {
 
     setLoading(false);
   };
-
-  if (user) return null; // already redirecting
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-200">
