@@ -1,14 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { Bookmark } from "lucide-react";
 import { toast } from "sonner";
+import { useAuth } from '@/context/AuthContext';
 
 export default function LoginPage() {
   const supabase = createClient();
   const router = useRouter();
+
+  const { user, loading: authLoading } = useAuth();
 
   const [mode, setMode] = useState<"login" | "signup">("login");
   const DEFAULT_EMAIL = process.env.NEXT_PUBLIC_DEMO_EMAIL || "";
@@ -19,6 +22,12 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   const isLogin = mode === "login";
+
+  useEffect(() => {
+    if (!authLoading && user) {
+      router.replace('/');
+    }
+  }, [authLoading, user, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,6 +80,8 @@ export default function LoginPage() {
 
     setLoading(false);
   };
+
+  if (user) return null; // already redirecting
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-200">
