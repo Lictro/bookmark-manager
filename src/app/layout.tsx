@@ -5,6 +5,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import { BookmarkDataProvider } from "@/context/BookmarkDataContext";
 import { BookmarkUIProvider } from "@/context/BookmarkUIContext";
 import { Toaster } from "@/components/ui/toaster";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,7 @@ export default function RootLayout({
           </BookmarkDataProvider>
           <Toaster />
         </AuthProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
