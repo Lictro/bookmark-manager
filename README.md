@@ -1,36 +1,118 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📌 Bookmark Manager
+
+A modern, minimal bookmark manager built with **Next.js 16**, **Supabase**, and **Tailwind CSS**.
+
+Designed as a personal knowledge hub with secure authentication, server-side protection, and a clean, accessible UI.
+
+---
+
+## Features
+
+- Supabase Authentication (SSR + protected routes)
+- Create, edit, archive and organize bookmarks
+- Tagging system
+- Search and sorting
+- Dark / Light mode support
+- Server-side session handling
+- Fully responsive and accessible UI
+
+---
+
+## Tech Stack
+
+- **Framework:** Next.js (App Router)
+- **Auth & Database:** Supabase
+- **Styling:** Tailwind CSS
+- **UI Primitives:** Radix UI
+- **Notifications:** Sonner
+- **Date utilities:** date-fns
+- **Icons:** Lucide
+
+---
 
 ## Getting Started
 
-First, run the development server:
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/your-username/bookmark-manager.git
+cd bookmark-manager
+```
+
+### 2. Environment variables
+
+Create a `.env.local` file and add:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_project_url
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your_anon_key
+```
+
+Optional demo credentials (for local development only):
+
+```env
+NEXT_PUBLIC_DEMO_EMAIL=
+NEXT_PUBLIC_DEMO_PASSWORD=
+```
+
+> ⚠️ **Never commit real secrets.**
+
+### 3. Install dependencies
+
+```bash
+npm install
+```
+
+### 4. Run locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Authentication & Route Protection
 
-## Learn More
+- Server-side route protection is handled via a Supabase SSR proxy.
+- Users are redirected to `/login` if no session exists.
+- Authenticated users are redirected away from `/login`.
+- Logout triggers immediate client redirect for better UX.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure (Simplified)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+ ├─ app/
+ ├─ components/
+ ├─ context/
+ ├─ lib/
+ │   └─ supabase/
+ ├─ types/
+ ├─ utils/
+```
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+##  Future Improvements
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Folder/group organization
+- Drag & drop ordering
+- Bookmark preview metadata fetching
+- Import/export functionality
+- Unit & integration tests
+
+---
+
+##  Design Philosophy
+
+The application prioritizes clarity, speed, and accessibility. Minimal UI. Zero clutter. Focused workflow.
+
+---
+
+##  License
+
+This project is licensed under the **MIT License**. See the [LICENSE](./LICENSE) file for details.
